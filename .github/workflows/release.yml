@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            ## Usage
+
+            ```hcl
+            module "secrets" {
+              source  = "gebalamariusz/secrets-manager/aws"
+              version = "${{ github.ref_name }}"
+
+              name_prefix = "myapp/prod"
+
+              secrets = {
+                "github-token" = {
+                  description = "GitHub Personal Access Token"
+                }
+                "database-password" = {
+                  description = "RDS master password"
+                }
+              }
+            }
+            ```
+
+            ## Documentation
+
+            See [README.md](https://github.com/gebalamariusz/terraform-aws-secrets-manager/blob/${{ github.ref_name }}/README.md) for full documentation.
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
