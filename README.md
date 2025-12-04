@@ -13,7 +13,7 @@ Terraform module to create AWS Secrets Manager secrets.
 - Creates multiple secrets from a single map
 - Optional KMS encryption (uses AWS managed key by default)
 - Configurable recovery window (0-30 days)
-- Supports \`ignore_changes\` for secrets managed outside Terraform
+- Supports `ignore_changes` for secrets managed outside Terraform
 - IAM policy helper output for easy integration
 - Consistent naming with optional prefix
 - Consistent tagging conventions
@@ -24,14 +24,14 @@ Terraform module to create AWS Secrets Manager secrets.
 
 This module creates "empty" secrets (or with placeholder values). Set the actual secret values:
 - Manually in AWS Console
-- Via AWS CLI: \`aws secretsmanager put-secret-value --secret-id <name> --secret-string <value>\`
+- Via AWS CLI: `aws secretsmanager put-secret-value --secret-id <name> --secret-string <value>`
 - Via CI/CD pipeline with proper secret handling
 
 ## Usage
 
 ### Basic usage
 
-\`\`\`hcl
+```hcl
 module "secrets" {
   source  = "gebalamariusz/secrets-manager/aws"
   version = "~> 1.0"
@@ -53,11 +53,11 @@ module "secrets" {
 
 # After apply, set values manually:
 # aws secretsmanager put-secret-value --secret-id myapp/prod/github-token --secret-string "ghp_xxx"
-\`\`\`
+```
 
 ### With initial placeholder value
 
-\`\`\`hcl
+```hcl
 module "secrets" {
   source  = "gebalamariusz/secrets-manager/aws"
   version = "~> 1.0"
@@ -79,11 +79,11 @@ module "secrets" {
 
   tags = var.tags
 }
-\`\`\`
+```
 
 ### Using secrets in ECS Task Definition
 
-\`\`\`hcl
+```hcl
 # Reference secrets in ECS task
 resource "aws_ecs_task_definition" "jenkins" {
   # ...
@@ -116,25 +116,25 @@ resource "aws_iam_role_policy" "ecs_secrets" {
     ]
   })
 }
-\`\`\`
+```
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| secrets | Map of secrets to create | \`map(object)\` | n/a | yes |
-| name_prefix | Prefix for secret names (e.g., 'myapp/prod') | \`string\` | \`""\` | no |
-| tags | Additional tags for all resources | \`map(string)\` | \`{}\` | no |
+| secrets | Map of secrets to create | `map(object)` | n/a | yes |
+| name_prefix | Prefix for secret names (e.g., 'myapp/prod') | `string` | `""` | no |
+| tags | Additional tags for all resources | `map(string)` | `{}` | no |
 
 ### Secret Object
 
 | Attribute | Description | Type | Default |
 |-----------|-------------|------|---------|
-| description | Secret description | \`string\` | \`""\` |
-| kms_key_id | KMS key ID for encryption | \`string\` | AWS managed |
-| recovery_days | Days to recover deleted secret (0-30) | \`number\` | \`30\` |
-| initial_value | Initial value (WARNING: in state) | \`string\` | \`null\` |
-| ignore_changes | Ignore changes to value after creation | \`bool\` | \`true\` |
+| description | Secret description | `string` | `""` |
+| kms_key_id | KMS key ID for encryption | `string` | AWS managed |
+| recovery_days | Days to recover deleted secret (0-30) | `number` | `30` |
+| initial_value | Initial value (WARNING: in state) | `string` | `null` |
+| ignore_changes | Ignore changes to value after creation | `bool` | `true` |
 
 ## Outputs
 
