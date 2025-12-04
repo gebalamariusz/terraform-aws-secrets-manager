@@ -16,11 +16,6 @@ locals {
     for k, v in var.secrets : k => var.name_prefix != "" ? "${var.name_prefix}/${k}" : k
   }
 
-  # Secrets that need initial value set
-  secrets_with_value = {
-    for k, v in var.secrets : k => v if v.initial_value != null
-  }
-
   # Secrets with ignore_changes = true (managed outside Terraform after creation)
   secrets_ignore_changes = {
     for k, v in var.secrets : k => v if v.ignore_changes && v.initial_value != null
